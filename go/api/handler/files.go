@@ -44,6 +44,8 @@ func (h *FileHandler) UploadFile(c *fiber.Ctx) error {
 
 	image := fmt.Sprintf("%s.%s", filename, fileExt)
 
+	// save to database
+
 	err := c.SaveFile(file, fmt.Sprintf("./uploads/%s", image))
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{

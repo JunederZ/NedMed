@@ -1,6 +1,7 @@
 package main
 
 import (
+	"NedMed/api/models/files"
 	"NedMed/api/routes"
 	"NedMed/internal/database"
 	"log"
@@ -12,7 +13,20 @@ func main() {
 
 	db := database.NewDatabase()
 
-	db.Seed()
+	if db == nil {
+		log.Fatal("Error connecting to database")
+	}
+	//
+	db.Migrate()
+
+	// add seed if table empty
+	if db.Conn.Migrator().HasTable(&files.FileEntity{}) {
+		var count int64
+		db.Conn.Model(&files.FileEntity{}).Count(&count)
+		if count == 0 {
+			db.Seed()
+		}
+	}
 
 	app := fiber.New()
 

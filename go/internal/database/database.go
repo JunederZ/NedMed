@@ -1,15 +1,19 @@
 package database
 
 import (
-	"database/sql"
+	"NedMed/api/models/files"
 	"log"
 	"os"
+	"time"
 
+	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 type Database struct {
-	Conn *sql.DB
+	Conn *gorm.DB
 }
 
 func NewDatabase() *Database {
@@ -20,59 +24,51 @@ func NewDatabase() *Database {
 
 func (db *Database) Connect() {
 	dbURL := os.Getenv("DATABASE_URL")
-	conn, err := sql.Open("postgres", dbURL)
+	conn, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
 	db.Conn = conn
+
 }
 
 func (db *Database) Close() {
-	err := db.Conn.Close()
-	if err != nil {
-		return
+	if db.Conn != nil {
+		db.Conn = nil
 	}
 }
 
 func (db *Database) Migrate() {
-	_, err := db.Conn.Exec(`
-		CREATE TABLE IF NOT EXISTS files (
-			id SERIAL PRIMARY KEY,
-			filename VARCHAR(255),
-			size INT,
-			mime_type VARCHAR(255),
-			description TEXT,
-			uploaded_at TIMESTAMP,
-			url VARCHAR(255)
-		)
-	`)
+	err := db.Conn.AutoMigrate(&files.FileEntity{})
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
 
 func (db *Database) Seed() {
-	_, err := db.Conn.Exec(`
-		INSERT INTO files (filename, size, mime_type, description, uploaded_at, url)
-		VALUES (
-			'example.jpg',
-			1024,
-			'image/jpeg',
-			'Example image',
-			NOW(),
-			'http://localhost:3000/files/example.jpg'
-		)
-	`)
+	file := files.FileEntity{
+		Filename:    "example.jpg",
+		Size:        1024,
+		MimeType:    "image/jpeg",
+		Description: "Example image",
+		UploadedAt:  time.Now(),
+		Url:         "http://localhost:3000/files/example.jpg",
+	}
+
+	err := db.Conn.Create(&file).Error
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
 
 func (db *Database) Drop() {
-	_, err := db.Conn.Exec("DROP TABLE IF EXISTS files")
+	err := db.Conn.Migrator().DropTable(&files.FileEntity{})
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
 
 func (db *Database) Reset() {
