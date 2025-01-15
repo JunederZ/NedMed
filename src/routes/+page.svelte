@@ -1,6 +1,14 @@
 <script lang="ts">
+    import PhotoCard from "$lib/components/PhotoCard.svelte";
 </script>
 
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<div class="flex flex-col items-center h-screen bg-slate-950 text-white">
+    <div class="mt-8">
+        <h1 class="text-4xl font-bold text-center">Media Archive</h1>
+        <p class="text-center">Keep your memories!</p>
+    </div>
+    <div class="flex h-[40vh] justify-center items-center gap-5">
+       <PhotoCard />
+       <PhotoCard />
+    </div>
+</div>

@@ -7,13 +7,14 @@ node_modules
 .wrangler
 /.svelte-kit
 /build
-/dist
+/distgi
 
 # OS
 .DS_Store
 Thumbs.db
 
 # Env
+go/.env
 .env
 .env.*
 !.env.example

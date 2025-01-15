@@ -4,7 +4,7 @@
 
 </script>
 
-<div class="flex justify-center w-screen h-20 text-white bg-gray-800">
+<div class="flex justify-center w-screen h-20 text-white bg-gray-900">
     <img src={Logo} alt="Logo"  class="rounded-3xl p-4 w-auto h-auto" />
     <h1 class="flex self-center font-bold ">
         Juned Media
