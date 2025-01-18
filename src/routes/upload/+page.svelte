@@ -1,8 +1,9 @@
 <script lang="ts">
 
-    import type {ActionData, PageData} from "../../../.svelte-kit/types/src/routes/upload/$types.js";
+    import type {ActionData} from "../../../.svelte-kit/types/src/routes/upload/$types.js";
+    import { enhance } from '$app/forms';
 
-    let { form }: { data: PageData, form: ActionData } = $props();
+    let { form }: { form: ActionData } = $props();
 
     let input: HTMLInputElement;
     let image = $state<HTMLImageElement>();
@@ -31,7 +32,12 @@
 
 
 <div class="flex flex-col bg-gray-950 justify-center items-center w-screen h-screen text-white">
-    <form method="POST" enctype=multipart/form-data action="?/upload" class="flex flex-col justify-center items-center">
+    <form
+            method="POST"
+            enctype=multipart/form-data
+            class="flex flex-col justify-center items-center"
+            use:enhance
+    >
         <h1 class="flex justify-center font-bold">Upload your media here!</h1>
         <div class="flex flex-col w-72 whitespace-nowrap overflow-hidden cursor-pointer">
             <input
@@ -40,7 +46,7 @@
                 type="file"
                 id="file"
                 name="file"
-                class="text-sm file:rounded-lg file:border-0 file:p-2 m-10 text-ellipsis overflow-hidden w-full h-full break-words cursor-pointer"
+                class="text-sm file:rounded-lg file:border-0 file:p-2 m-10 text-ellipsis w-full h-full cursor-pointer"
             />
         </div>
         <div class="flex justify-center font-bold">
@@ -52,10 +58,8 @@
         </div>
 
         <button class="flex justify-center items-center bg-gray-700 p-4 rounded-2xl w-fit m-10 font-bold text-gray-300 hover:scale-105 hover:bg-gray-500 transition-all">Finish and Upload</button>
+        {#if form?.success}
+            <p>Image uploaded successfully!</p>
+        {/if}
     </form>
-    {#if form?.success}
-        <!-- this message is ephemeral; it exists because the page was rendered in
-               response to a form submission. it will vanish if the user reloads -->
-        <p>Successfully logged in! Welcome back</p>
-    {/if}
 </div>

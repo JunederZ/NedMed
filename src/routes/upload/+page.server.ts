@@ -1,41 +1,39 @@
-import type {Actions} from "@sveltejs/kit";
-import type {PageServerLoad} from "./$types.js";
+import {type Actions } from "@sveltejs/kit";
+// import type {PageServerLoad} from "./$types.js";
+import axios from "axios";
 
-export const load: PageServerLoad = (event) => {
-    console.log("Load page server...");
-    event.cookies.set("sessionid", new Date().getTime().toString(), { path : ""})
-    return
-}
+// export const load: PageServerLoad = (event) => {
+//     event.cookies.set("sessionid", new Date().getTime().toString(), { path : ""})
+//     return
+// }
 
 export const actions = {
-    upload: async (event) => {
+    default: async (event) => {
 
         const data = await event.request.formData()
         const file = data.get("file") as File | null;
 
-        if (!file) {
+        if (!file?.size) {
             console.log("No file");
             return { success: false, message: "No file selected." };
         }
 
-
         const formData = new FormData();
         formData.append('image', file);
-        console.log(formData);
-
 
         try {
-            const response = await fetch('http://127.0.0.1:3000/upload', {
-                method: 'POST',
-                body: formData,
+            const response = await axios.post('http://127.0.0.1:3000/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             });
 
-            if (response.ok) {
+            if (response.statusText == "OK") {
                 console.log("Successfully uploaded!");
                 return { success: true };
             } else {
-                console.log("Failed to upload" + await response.text());
-                return { success: false, message: 'Upload failed.' + (await response.text()) };
+                console.log("Failed to upload" + await response.data);
+                return { success: false, message: 'Upload failed.' + (await response.data) };
             }
         } catch (error) {
             console.error("Error during upload:", error);
