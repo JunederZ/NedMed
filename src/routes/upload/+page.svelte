@@ -1,22 +1,24 @@
 <script lang="ts">
 
-    import type { PageData } from "../../../.svelte-kit/types/src/routes/upload/$types.js";
+    import type {ActionData, PageData} from "../../../.svelte-kit/types/src/routes/upload/$types.js";
 
-    let { data }: {data: PageData} = $props();
+    let { form }: { data: PageData, form: ActionData } = $props();
 
-    let input;
-    let image = $state();
+    let input: HTMLInputElement;
+    let image = $state<HTMLImageElement>();
     let showImage = $state(false);
 
     function onChange() {
-        const file = input.files[0];
+        const file = input.files?.[0];
 
         if (file) {
             showImage = true;
 
             const reader = new FileReader();
             reader.addEventListener("load", function () {
-                image.setAttribute("src", reader.result);
+                if (image && reader.result != null && typeof reader.result === "string") {
+                    image.setAttribute("src", reader.result);
+                }
             });
             reader.readAsDataURL(file);
 
@@ -36,6 +38,8 @@
                 bind:this={input}
                 onchange={onChange}
                 type="file"
+                id="file"
+                name="file"
                 class="text-sm file:rounded-lg file:border-0 file:p-2 m-10 text-ellipsis overflow-hidden w-full h-full break-words cursor-pointer"
             />
         </div>
@@ -49,4 +53,9 @@
 
         <button class="flex justify-center items-center bg-gray-700 p-4 rounded-2xl w-fit m-10 font-bold text-gray-300 hover:scale-105 hover:bg-gray-500 transition-all">Finish and Upload</button>
     </form>
+    {#if form?.success}
+        <!-- this message is ephemeral; it exists because the page was rendered in
+               response to a form submission. it will vanish if the user reloads -->
+        <p>Successfully logged in! Welcome back</p>
+    {/if}
 </div>

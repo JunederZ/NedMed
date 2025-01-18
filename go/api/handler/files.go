@@ -2,6 +2,7 @@ package handler
 
 import (
 	"NedMed/api/models/files"
+	"NedMed/internal/database"
 	"fmt"
 	"mime/multipart"
 	"strings"
@@ -48,12 +49,29 @@ func (h *FileHandler) UploadFile(c *fiber.Ctx) error {
 
 	err := c.SaveFile(file, fmt.Sprintf("./uploads/%s", image))
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{
-			"message": "Could not save file",
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Error uploading file",
 		})
 	}
 
 	imageUrl := fmt.Sprintf("http://localhost:3000/files/%s", image)
+
+	fileEntity := files.FileEntity{
+		Filename: file.Filename,
+		Size:     file.Size,
+		MimeType: file.Header["Content-Type"][0],
+		//Description: req.Description,
+		UploadedAt: time.Now(),
+		Url:        imageUrl,
+	}
+
+	db := database.NewDatabase()
+	err = db.Conn.Create(&fileEntity).Error
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not save file",
+		})
+	}
 
 	fileInfo := files.FileResponse{
 		ID:          uuid.New().String(),
