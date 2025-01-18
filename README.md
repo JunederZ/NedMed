@@ -1,58 +1,55 @@
-# create-svelte
+# NedMed: Self-Hosted Media Uploader
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+NedMed is a simple self-hosted application for uploading and storing media files on your local machine or self-hosted server, with PostgreSQL integration for metadata storage. It uses a Go backend for handling file uploads and a Svelte/TypeScript frontend for a modern user interface.
 
-Read more about creating a library [in the docs](https://svelte.dev/docs/kit/packaging).
+## Features
 
-## Creating a project
+* File uploading with preview.
+* Storage of files on the local/self-hosted server.
+* PostgreSQL database integration for storing file metadata.
 
-If you're seeing this, you've probably already done this step. Congrats!
 
-```bash
-# create a new project in the current directory
-npx sv create
+## Getting Started
 
-# create a new project in my-app
-npx sv create my-app
+### Requirements
+
+* **Go:** Install Go (https://go.dev/doc/install).
+* **Node.js and npm/pnpm/yarn:** Install Node.js and your preferred package manager (https://nodejs.org/).
+* **PostgreSQL:** Install and run PostgreSQL.  Ensure you have the necessary database credentials.
+
+
+### Backend (Go)
+
+1. **Navigate to the backend directory (`go`):**  `cd go`
+
+2. **Install dependencies:** `go mod tidy`
+
+3. **Set up database connection:** Create a `.env` file in the `go` directory with your PostgreSQL connection details (adjust as needed):
+
 ```
+DATABASE_URL=postgresql://user:password@host:port/database
+  ```
 
-## Developing
+4. **Run the server:** (replace `main` with your main package) `go run ./cmd/main`  or `go build ./cmd/main && ./main`
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-```bash
-npm run dev
+### Frontend (SvelteKit)
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+1. **Navigate to the frontend directory (`src`):** `cd src`
+2. **Install dependencies:** `npm install` (or `pnpm install`, `yarn install`)
+3. **Run the development server:** `npm run dev -- --open` (or `pnpm dev -- --open`, `yarn dev -- --open`)
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
 
-## Building
+## Deployment (Self-Hosting)
 
-To build your library:
+1. **Build the Go backend:** `go build -o nedmed ./cmd/main`
+2. **Build the SvelteKit frontend:** `npm run build` (or `pnpm build`, `yarn build`)
+3. **Copy the artifacts:** Copy the Go executable (`nedmed`) and the `.svelte-kit/output/server` directory contents to your server.  Also, copy the  `.svelte-kit/output/client` directory contents to a location accessible by your web server.
+4. **Run the backend:** Start your Go server (e.g., using `systemd`, `pm2`).
+5. **Serve the frontend:** Configure a web server (Nginx, Apache, Caddy) to serve the frontend files from `.svelte-kit/output/client` and reverse proxy requests to your Go backend as necessary. Set up your database on the server.
 
-```bash
-npm run package
-```
 
-To create a production version of your showcase app:
+## Future Enhancements
 
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```bash
-npm publish
-```
+* User Authentication
+* File Management (delete, rename)
