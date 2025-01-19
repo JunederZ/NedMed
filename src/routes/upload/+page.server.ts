@@ -1,6 +1,8 @@
 import {type Actions } from "@sveltejs/kit";
 // import type {PageServerLoad} from "./$types.js";
-import axios from "axios";
+// import axios from "axios";
+import DatabaseFetcher from "../../lib/server/database/fetch.js"
+
 
 // export const load: PageServerLoad = (event) => {
 //     event.cookies.set("sessionid", new Date().getTime().toString(), { path : ""})
@@ -18,29 +20,8 @@ export const actions = {
             return { success: false, message: "No file selected." };
         }
 
-        const formData = new FormData();
-        formData.append('image', file);
-
-        try {
-            const response = await axios.post('http://127.0.0.1:3000/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-
-            if (response.statusText == "OK") {
-                console.log("Successfully uploaded!");
-                return { success: true };
-            } else {
-                console.log("Failed to upload" + await response.data);
-                return { success: false, message: 'Upload failed.' + (await response.data) };
-            }
-        } catch (error) {
-            console.error("Error during upload:", error);
-            return { success: false, message: 'Upload failed.' };
-        }
-
-
+        const fetch = new DatabaseFetcher()
+        return await fetch.uploadPhoto(file)
 
     }
 } satisfies Actions

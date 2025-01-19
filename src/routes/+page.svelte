@@ -1,5 +1,11 @@
 <script lang="ts">
     import PhotoCard from "$lib/components/PhotoCard.svelte";
+    import type { PageData } from "./$types.js";
+
+    let { data }: { data: PageData } = $props()
+
+    console.log(data)
+
 </script>
 
 <div class="flex flex-col items-center h-screen bg-slate-950 text-white">
@@ -8,7 +14,8 @@
         <p class="text-center">Keep your memories!</p>
     </div>
     <div class="flex h-[40vh] justify-center items-center gap-5">
-       <PhotoCard />
-       <PhotoCard />
+        {#each data.photos as photo}
+            <PhotoCard {...photo}/>
+        {/each}
     </div>
 </div>

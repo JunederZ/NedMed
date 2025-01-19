@@ -95,3 +95,16 @@ func (h *FileHandler) GetFile(c *fiber.Ctx) error {
 	fmt.Println(filename)
 	return c.SendFile(fmt.Sprintf("./uploads/%s", filename))
 }
+
+func (h *FileHandler) GetAllFile(c *fiber.Ctx) error {
+	db := database.NewDatabase()
+	var files []files.FileEntity
+	err := db.Conn.Find(&files).Error
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not retrieve files",
+		})
+	}
+
+	return c.JSON(files)
+}

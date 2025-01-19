@@ -12,4 +12,5 @@ func RegisterFileRoutes(app *fiber.App) {
 
 	app.Post("/upload", validator.ValidateImage(), (&handler.FileHandler{}).UploadFile)
 	app.Get("/files/:filename", (&handler.FileHandler{}).GetFile)
+	app.Get("/files", (&handler.FileHandler{}).GetAllFile)
 }
