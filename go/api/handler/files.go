@@ -37,6 +37,20 @@ func (h *FileHandler) UploadFile(c *fiber.Ctx) error {
 		})
 	}
 
+	title, ok := c.Locals("title").(string)
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid title",
+		})
+	}
+
+	description, ok := c.Locals("description").(string)
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid description",
+		})
+	}
+
 	uniqueId := uuid.New()
 
 	filename := strings.Replace(uniqueId.String(), "-", "", -1)
@@ -57,12 +71,12 @@ func (h *FileHandler) UploadFile(c *fiber.Ctx) error {
 	imageUrl := fmt.Sprintf("http://localhost:3000/files/%s", image)
 
 	fileEntity := files.FileEntity{
-		Filename: file.Filename,
-		Size:     file.Size,
-		MimeType: file.Header["Content-Type"][0],
-		//Description: req.Description,
-		UploadedAt: time.Now(),
-		Url:        imageUrl,
+		Filename:    title,
+		Size:        file.Size,
+		MimeType:    file.Header["Content-Type"][0],
+		Description: description,
+		UploadedAt:  time.Now(),
+		Url:         imageUrl,
 	}
 
 	db := database.NewDatabase()

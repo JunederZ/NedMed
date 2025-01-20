@@ -14,6 +14,8 @@ export const actions = {
 
         const data = await event.request.formData()
         const file = data.get("file") as File | null;
+        const title = data.get("title") as string;
+        const description = data.get("description") as string;
 
         if (!file?.size) {
             console.log("No file");
@@ -21,7 +23,7 @@ export const actions = {
         }
 
         const fetch = new DatabaseFetcher()
-        return await fetch.uploadPhoto(file)
+        return await fetch.uploadPhoto(file, title, description)
 
     }
 } satisfies Actions

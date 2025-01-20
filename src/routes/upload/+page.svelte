@@ -36,18 +36,46 @@
             method="POST"
             enctype=multipart/form-data
             class="flex flex-col justify-center items-center"
-            use:enhance
+            use:enhance={() => {
+                return async ({update}) => {
+                    showImage = false
+                    await update()
+                }
+            }}
     >
         <h1 class="flex justify-center font-bold">Upload your media here!</h1>
-        <div class="flex flex-col w-72 whitespace-nowrap overflow-hidden cursor-pointer">
+        <div class="flex flex-col w-72 whitespace-nowrap overflow-hidden">
             <input
                 bind:this={input}
                 onchange={onChange}
                 type="file"
+                required
                 id="file"
+                accept="image/*"
                 name="file"
-                class="text-sm file:rounded-lg file:border-0 file:p-2 m-10 text-ellipsis w-full h-full cursor-pointer"
+                class="text-sm file:rounded-lg file:border-0 file:p-2 m-10 text-ellipsis w-full cursor-pointer"
             />
+            <label for="title">
+                Image title
+            </label>
+            <input
+                    required
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Title"
+                    class="text-gray-600 p-2 focus:outline-none my-2 rounded-lg bg-gray-100"
+            >
+            <label for="description">
+                Image description
+            </label>
+            <textarea
+                    required
+                    id="description"
+                    name="description"
+                    placeholder="Description"
+                    class="text-gray-600 text-wrap p-2 focus:outline-none my-2 rounded-lg bg-gray-100 max-h-24"
+            ></textarea>
         </div>
         <div class="flex justify-center font-bold">
             {#if showImage}

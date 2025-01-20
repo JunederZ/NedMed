@@ -20,12 +20,12 @@
 </script>
 
 
-<div class="flex flex-col h-32">
+<div class="flex flex-col h-full bg-gray-600/60 p-4 rounded-xl">
     <div>
-        {#if props.title == null || props.title === ""}
+        {#if props.filename == null || props.filename === ""}
             <h1>No Title</h1>
         {:else}
-            <h1>{props.title}</h1>
+            <h1>{props.filename}</h1>
         {/if}
     </div>
     <div>

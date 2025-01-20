@@ -12,5 +12,13 @@
     <h2 class="text-2xl font-bold text-center">
         I'm sorry :(
     </h2>
+    <div class="flex flex-col m-20">
+        <h2 class="text-center font-semibold">
+            Error details
+        </h2>
+        <p>
+            {page.status} {page.error?.message}
+        </p>
+    </div>
 
 </div>

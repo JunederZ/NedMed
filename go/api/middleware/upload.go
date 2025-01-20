@@ -29,7 +29,6 @@ func NewFileValidator() *FileValidator {
 
 func (v *FileValidator) ValidateImage() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		// Get the file from the request
 		file, err := c.FormFile("image")
 		if err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -82,8 +81,18 @@ func (v *FileValidator) ValidateImage() fiber.Handler {
 			})
 		}
 
+		title := c.FormValue("title")
+		description := c.FormValue("description")
+		if len(title) == 0 || len(description) == 0 {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": "Title and Description required",
+			})
+		}
+
 		// Store file in locals for the next handler
 		c.Locals("file", file)
+		c.Locals("description", description)
+		c.Locals("title", title)
 
 		return c.Next()
 	}
