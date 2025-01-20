@@ -8,7 +8,7 @@
 
 </script>
 
-<div class="flex flex-col items-center h-screen w-screen bg-slate-950 text-white">
+<div class="flex flex-col items-center h-screen w-screen  text-center bg-slate-950 text-white">
     <div class="mt-8">
         <h1 class="text-4xl font-bold text-center">Media Archive</h1>
         <p class="text-center">Keep your memories!</p>
