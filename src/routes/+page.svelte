@@ -8,12 +8,12 @@
 
 </script>
 
-<div class="flex flex-col items-center h-screen w-screen  text-center bg-slate-950 text-white">
+<div class="flex flex-col items-center h-full w-screen  text-center text-white">
     <div class="mt-8">
         <h1 class="text-4xl font-bold text-center">Media Archive</h1>
         <p class="text-center">Keep your memories!</p>
     </div>
-    <div class="grid grid-cols-[repeat(auto-fit,_16.666666%)] place-items-center m-10 gap-10 w-screen justify-center items-center">
+    <div class="flex flex-wrap justify-center gap-6 py-8">
         {#each data.photos as photo}
             <PhotoCard {...photo}/>
         {/each}
