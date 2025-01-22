@@ -4,50 +4,77 @@ NedMed is a simple self-hosted application for uploading and storing media files
 
 ## Features
 
-* File uploading with preview.
-* Storage of files on the local/self-hosted server.
-* PostgreSQL database integration for storing file metadata.
-
+* File uploading with preview
+* Storage of files on the local/self-hosted server
+* PostgreSQL database integration for storing file metadata
 
 ## Getting Started
 
 ### Requirements
 
-* **Go:** Install Go (https://go.dev/doc/install).
-* **Node.js and npm/pnpm/yarn:** Install Node.js and your preferred package manager (https://nodejs.org/).
-* **PostgreSQL:** Install and run PostgreSQL.  Ensure you have the necessary database credentials.
+* Docker and Docker Compose
+* Git (for cloning the repository)
 
+### Quick Start with Docker
 
-### Backend (Go)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/nedmed.git
+   cd nedmed
+   ```
 
-1. **Navigate to the backend directory (`go`):**  `cd go`
+2. Create a `.env` file in the root directory:
+   ```env
+   DATABASE_URL=postgresql://user:password@host:port/database
+   DB_USER=user
+   DB_PASSWORD=password
+   DB_DATABASE=database
+   ```
 
-2. **Install dependencies:** `go mod tidy`
+3. Start the application:
+   ```bash
+   docker-compose up --build
+   ```
 
-3. **Set up database connection:** Create a `.env` file in the `go` directory with your PostgreSQL connection details (adjust as needed):
+The application will be available at:
+http://localhost:3000
 
+### Manual Setup (Development)
+
+If you prefer to run the services without Docker, follow these steps:
+
+#### Requirements
+* Go (https://go.dev/doc/install)
+* Node.js and npm/pnpm/yarn (https://nodejs.org/)
+* PostgreSQL
+
+#### Backend (Go)
+1. Navigate to backend: `cd go`
+2. Install dependencies: `go mod tidy`
+3. Create `.env` file with your PostgreSQL details
 ```
 DATABASE_URL=postgresql://user:password@host:port/database
   ```
+4. Run: `go run ./cmd/NedMed`
 
-4. **Run the server:** (replace `main` with your main package) `go run ./cmd/main`  or `go build ./cmd/main && ./main`
-
-
-### Frontend (SvelteKit)
-
-1. **Navigate to the frontend directory (`src`):** `cd src`
-2. **Install dependencies:** `npm install` (or `pnpm install`, `yarn install`)
-3. **Run the development server:** `npm run dev -- --open` (or `pnpm dev -- --open`, `yarn dev -- --open`)
-
+#### Frontend (SvelteKit)
+1. Navigate to frontend: `cd src`
+2. Install dependencies: `npm install`
+3. Run development server: `npm run dev -- --open`
 
 ## Deployment (Self-Hosting)
 
-1. **Build the Go backend:** `go build -o nedmed ./cmd/main`
-2. **Build the SvelteKit frontend:** `npm run build` (or `pnpm build`, `yarn build`)
-3. **Copy the artifacts:** Copy the Go executable (`nedmed`) and the `.svelte-kit/output/server` directory contents to your server.  Also, copy the  `.svelte-kit/output/client` directory contents to a location accessible by your web server.
-4. **Run the backend:** Start your Go server (e.g., using `systemd`, `pm2`).
-5. **Serve the frontend:** Configure a web server (Nginx, Apache, Caddy) to serve the frontend files from `.svelte-kit/output/client` and reverse proxy requests to your Go backend as necessary. Set up your database on the server.
+### Using Docker (Recommended)
+1. Adjust the `.env` file with your production credentials
+2. Start services: `docker-compose up -d`
+3. Configure your reverse proxy (Nginx, Apache, Caddy) to forward traffic to the containers
 
+### Manual Deployment
+1. Build backend: `go build -o nedmed ./cmd/NedMed`
+2. Build frontend: `npm run build`
+3. Copy the built files to your server
+4. Configure your web server and database
+5. Start the services using process managers (systemd, pm2)
 
 ## Future Enhancements
 

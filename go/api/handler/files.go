@@ -5,6 +5,7 @@ import (
 	"NedMed/internal/database"
 	"fmt"
 	"mime/multipart"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -107,11 +108,20 @@ func (h *FileHandler) UploadFile(c *fiber.Ctx) error {
 func (h *FileHandler) GetFile(c *fiber.Ctx) error {
 	filename := c.Params("filename")
 	fmt.Println(filename)
+	ext := filepath.Ext(filename)
+	switch ext {
+	case ".jpg", ".jpeg":
+		c.Set("Content-Type", "image/jpeg")
+	case ".png":
+		c.Set("Content-Type", "image/png")
+	}
 	return c.SendFile(fmt.Sprintf("./uploads/%s", filename))
 }
 
 func (h *FileHandler) GetAllFile(c *fiber.Ctx) error {
+	print("Get all files")
 	db := database.NewDatabase()
+	print("Get all files [2]")
 	var files []files.FileEntity
 	err := db.Conn.Find(&files).Error
 	if err != nil {

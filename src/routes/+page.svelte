@@ -4,8 +4,6 @@
 
     let { data }: { data: PageData } = $props()
 
-    console.log(data)
-
 </script>
 
 <div class="flex flex-col items-center h-full w-screen  text-center text-white">
@@ -14,8 +12,8 @@
         <p class="text-center">Keep your memories!</p>
     </div>
     <div class="flex flex-wrap justify-center gap-6 py-8">
-        {#each data.photos as photo}
-            <PhotoCard {...photo}/>
+        {#each data.photoData as photo, index}
+            <PhotoCard {...photo} img={data.imgData[index]}/>
         {/each}
     </div>
 </div>

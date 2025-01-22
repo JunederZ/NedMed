@@ -3,8 +3,7 @@
     import NoImg from "../assets/no-img.png"
 
     let props = $props();
-    console.log(props);
-
+    
     const downloadImage = () => {
         if (props.url) {
             const link = document.createElement('a');
@@ -37,10 +36,10 @@
             {/if}
         </div>
         <div class="flex">
-            {#if props.url == null || props.url === ""}
+            {#if props.url.includes("example")}
                 <img src={NoImg} alt="" class="w-auto h-40 aspect-square object-cover rounded-md" />
             {:else}
-                <img src={props.url} alt="" class="w-auto h-40 aspect-square object-cover rounded-md" />
+                <img src={props.img} alt="" class="w-auto h-40 aspect-square object-cover rounded-md" />
             {/if}
         </div>
     </div>
