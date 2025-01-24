@@ -132,3 +132,26 @@ func (h *FileHandler) GetAllFile(c *fiber.Ctx) error {
 
 	return c.JSON(files)
 }
+
+func (h *FileHandler) deleteFile(c *fiber.Ctx) error {
+	filename := c.Params("filename")
+	db := database.NewDatabase()
+	var file files.FileEntity
+	err := db.Conn.Where("filename = ?", filename).First(&file).Error
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not retrieve file",
+		})
+	}
+
+	err = db.Conn.Delete(&file).Error
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not delete file",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "File deleted successfully",
+	})
+}
