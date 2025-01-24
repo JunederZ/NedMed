@@ -133,7 +133,7 @@ func (h *FileHandler) GetAllFile(c *fiber.Ctx) error {
 	return c.JSON(files)
 }
 
-func (h *FileHandler) deleteFile(c *fiber.Ctx) error {
+func (h *FileHandler) DeleteFile(c *fiber.Ctx) error {
 	filename := c.Params("filename")
 	db := database.NewDatabase()
 	var file files.FileEntity
