@@ -29,6 +29,7 @@ NedMed is a simple self-hosted application for uploading and storing media files
    DB_USER=user
    DB_PASSWORD=password
    DB_DATABASE=database
+   BACKEND_URL = http://localhost:3000
    ```
 
 3. Start the application:
